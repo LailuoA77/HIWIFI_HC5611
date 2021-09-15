@@ -5,7 +5,7 @@ on:
     branches: 
         -master
   pull_request:
-    branches: [ main ]
+    branches: [ 构建 ]
   workflow_dispatch:
 
 jobs:
