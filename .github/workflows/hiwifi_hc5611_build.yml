@@ -41,10 +41,14 @@ jobs:
       #编译固件
       - name: 下载固件依赖
         run: |
-          make -j8 download V=s
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+          
       - name: 编译固件
         run: |
-          make         
+          echo -e "$(nproc) thread build."
+          make -j$(nproc) V=s        
           
       - name: 完成固件
         run: |
