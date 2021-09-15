@@ -1,3 +1,5 @@
+/dts-v1/;
+
 #include "mt7628an.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -16,12 +18,12 @@
 		reg = <0x0 0x8000000>;
 	};
 
-	gpio_leds {
+	leds {
 		compatible = "gpio-leds";
 
 		system {
-			label = "hc5611:green:system";
-			gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+			label = "hc5611:blue:system";
+			gpios = <&gpio 11 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -32,11 +34,11 @@
 		power-led {
 			gpio-export,name = "power-led";
 			gpio-export,output = <1>;
-			gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
 		};
 	};
 
-	gpio-keys {
+	keys {
 		compatible = "gpio-keys-polled";
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -44,7 +46,7 @@
 
 		reset {
 			label = "reset";
-			gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
 		};
 	};
@@ -70,57 +72,62 @@
 		linux,modalias = "m25p80", "w25q128";
 		spi-max-frequency = <10000000>;
 		m25p,chunked-io = <32>;
+		
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
 
-		partition@0 {
-			label = "u-boot";
-			reg = <0x0 0x30000>;
-			read-only;
-		};
+			partition@0 {
+				label = "u-boot";
+				reg = <0x0 0x30000>;
+				read-only;
+			};
 
-		partition@30000 {
-			label = "hw_panic";
-			reg = <0x30000 0x10000>;
-			read-only;
-		};
+			partition@30000 {
+				label = "hw_panic";
+				reg = <0x30000 0x10000>;
+				read-only;
+			};
 
-		factory: partition@40000 {
-			label = "factory";
-			reg = <0x40000 0x10000>;
-			read-only;
-		};
+			factory: partition@40000 {
+				label = "factory";
+				reg = <0x40000 0x10000>;
+				read-only;
+			};
 
-		partition@50000 {
-			label = "firmware";
-			reg = <0x50000 0xf70000>;
-		};
+			partition@50000 {
+				compatible = "denx,uimage";
+				label = "firmware";
+				reg = <0x50000 0xf70000>;
+			};
 
-		partition@fc0000 {
-			label = "oem";
-			reg = <0xfc0000 0x20000>;
-			read-only;
-		};
+			partition@fc0000 {
+				label = "oem";
+				reg = <0xfc0000 0x20000>;
+				read-only;
+			};
 
-		bdinfo: partition@fe0000 {
-			label = "bdinfo";
-			reg = <0xfe0000 0x10000>;
-			read-only;
-		};
+			bdinfo: partition@fe0000 {
+				label = "bdinfo";
+				reg = <0xfe0000 0x10000>;
+				read-only;
+			};
 
-		partition@ff0000 {
-			label = "backup";
-			reg = <0xff0000 0x10000>;
-			read-only;
+			partition@ff0000 {
+				label = "backup";
+				reg = <0xff0000 0x10000>;
+				read-only;
+			};
 		};
 	};
 };
 
 &ethernet {
-	nvmem-cells = <&macaddr_factory_4>;
-	nvmem-cell-names = "mac-address";
+	mtd-mac-address = <&factory 0x4>;
+	mediatek,portmap = "wllll";
 };
 
 &wmac {
 	status = "okay";
-
-	mediatek,mtd-eeprom = <&factory 0x0>;
 };
