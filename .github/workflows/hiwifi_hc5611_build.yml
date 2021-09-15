@@ -20,6 +20,10 @@ jobs:
           sudo -E apt-get update
           sudo -E apt-get -y install subversion g++ zlib1g-dev build-essential git python rsync man-db
           sudo -E apt-get -y install libncurses5-dev gawk gettext unzip file libssl-dev wget zip time
+          sudo -E apt-get autoclean
+          sudo -E apt-get clean
+          sudo -E apt-get autoremove
+          df -hl          
 
       - name: git clone
       #更换自己的软件源
