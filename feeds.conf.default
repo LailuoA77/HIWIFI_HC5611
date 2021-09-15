@@ -6,5 +6,5 @@ src-git telephony https://git.openwrt.org/feed/telephony.git
 #src-git targets https://github.com/openwrt/targets.git
 #src-git oldpackages http://git.openwrt.org/packages.git
 #src-link custom /usr/src/openwrt/custom-feed
-src-git lienol https://github.com/Lienol/openwrt-package.git;main
+#src-git lienol https://github.com/Lienol/openwrt-package.git;main
 src-git laohu https://github.com/huchanghui123/Lienol-openwrt-packages-backup.git
