@@ -24,7 +24,7 @@ jobs:
       - name: git clone
       #更换自己的软件源
         run: |
-          git clone https://github.com/openwrt/openwrt.git
+          git clone https://github.com/Lienol/openwrt.git
           git clone https://github.com/LailuoA77/HIWIFI_HC5611.git      
           echo "数据克隆结束！"
           
