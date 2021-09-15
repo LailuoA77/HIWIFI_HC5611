@@ -37,6 +37,12 @@ jobs:
           grep -lri hc5611 ./
           ./scripts/feeds update -a & ./scripts/feeds install -a
           
+      #编译固件
+      - name: build-farm
+        run: |
+          make
+          
+          
           
       
           
