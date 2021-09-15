@@ -24,8 +24,8 @@ jobs:
       - name: git clone
       #更换自己的软件源
         run: |
-          git clone https://git.openwrt.org/openwrt/openwrt.git/ 
-          git clone https://github.com/LailuoA77/HIWIFI_HC5611.git/        
+          git clone https://github.com/openwrt/openwrt.git
+          git clone https://github.com/LailuoA77/HIWIFI_HC5611.git      
           echo "数据克隆结束！"
           
       #将文件覆盖到openwrt根目录下
@@ -35,7 +35,6 @@ jobs:
           cp -r ./ ../openwrt/
           cd ../openwrt
           ./scripts/feeds update -a & ./scripts/feeds install -a
-          make menuconfig
           
           
       
