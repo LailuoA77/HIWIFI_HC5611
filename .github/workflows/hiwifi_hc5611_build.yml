@@ -44,6 +44,19 @@ jobs:
           
           
           
+      - name: 完成固件
+        run: |
+          rm -rf ./artifact/
+          mkdir -p ./artifact/
+          find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./artifact/
+          find ./bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./artifact/
+          
+      - name: 发布固件
+        uses: actions/upload-artifact@master
+        with:
+          name: OpenWrt firmware
+          path: ./artifact/
+          
       
           
           
