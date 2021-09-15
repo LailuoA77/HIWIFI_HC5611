@@ -41,18 +41,19 @@ jobs:
           rm -rf ~/HIWIFI_HC5611
           grep -lri hc5611 ./
           ./scripts/feeds clean
-          ./scripts/feeds update -a & ./scripts/feeds install -a
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
           make defconfig
           
       #编译固件
       - name: 下载固件依赖
         run: |
           cd openwrt
-          ls -l
+          df -hl 
           echo -e "$(nproc) thread download."
           make download -j$(nproc) V=s
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
+          # find dl -size -1024c -exec ls -l {} \;
+          # find dl -size -1024c -exec rm -f {} \;
           
       - name: 编译固件
         run: |
