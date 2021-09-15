@@ -35,14 +35,16 @@ jobs:
           cp -r ./ ../openwrt/
           cd ../openwrt
           grep -lri hc5611 ./
+          ./scripts/feeds clean
           ./scripts/feeds update -a & ./scripts/feeds install -a
           
       #编译固件
-      - name: build-farm
+      - name: 下载固件依赖
         run: |
-          make
-          
-          
+          make -j8 download V=s
+      - name: 编译固件
+        run: |
+          make         
           
       - name: 完成固件
         run: |
