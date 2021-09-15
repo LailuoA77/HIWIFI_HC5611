@@ -34,10 +34,6 @@ ramips_setup_interfaces()
 		ucidef_add_switch_attr "switch0" "enable" "false"
 		ucidef_set_interface_lan "eth0"
 		;;
-	hiwifi,hc5611)
-		ucidef_add_switch "switch0" \
-			"3:lan" "6@eth0"
-		;;
 	asus,rt-n10p-v3|\
 	asus,rt-n11p-b1|\
 	asus,rt-n12-vp-b1|\
@@ -90,6 +86,10 @@ ramips_setup_interfaces()
 	zyxel,keenetic-extra-ii)
 		ucidef_add_switch "switch0" \
 			"1:lan" "2:lan" "3:lan" "4:lan" "0:wan" "6@eth0"
+		;;
+	hiwifi,hc5611)
+		ucidef_add_switch "switch0" \
+			"3:lan" "6@eth0"
 		;;
 	hiwifi,hc5761a)
 		ucidef_add_switch "switch0" \
@@ -198,7 +198,7 @@ ramips_setup_macs()
 		wan_mac=$(mtd_get_mac_binary factory 0x22)
 		label_mac=$wan_mac
 		;;
-	hiwifi,hc5611|\	
+	hiwifi,hc5611|\
 	hiwifi,hc5661a|\
 	hiwifi,hc5761a|\
 	hiwifi,hc5861b)
