@@ -42,6 +42,7 @@ jobs:
       #编译固件
       - name: 下载固件依赖
         run: |
+          cd openwrt
           ls -l
           make download
           find dl -size -1024c -exec ls -l {} \;
