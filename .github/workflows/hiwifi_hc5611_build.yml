@@ -51,7 +51,7 @@ jobs:
           cd openwrt
           df -hl 
           echo -e "$(nproc) thread download."
-          make download -j$(nproc) V=s
+          make download -j$(nproc)
           # find dl -size -1024c -exec ls -l {} \;
           # find dl -size -1024c -exec rm -f {} \;
           
@@ -59,7 +59,7 @@ jobs:
         run: |
           cd openwrt
           echo -e "$(nproc) thread build."
-          make -j$(nproc) V=s        
+          make -j$(nproc)        
           
       - name: 完成固件
         run: |
