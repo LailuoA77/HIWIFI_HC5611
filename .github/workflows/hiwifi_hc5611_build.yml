@@ -9,13 +9,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: install ev
@@ -25,10 +22,23 @@ jobs:
           sudo -E apt-get -y install libncurses5-dev gawk gettext unzip file libssl-dev wget zip time
 
       - name: git clone
+      #更换自己的软件源
         run: |
-          git clone https://git.openwrt.org/openwrt/openwrt.git/
-          cd ./openwrt
-          echo "结束！"
+          git clone https://git.openwrt.org/openwrt/openwrt.git/ 
+          git clone https://github.com/LailuoA77/HIWIFI_HC5611.git/        
+          echo "数据克隆结束！"
+          
+      #将文件覆盖到openwrt根目录下
+      - name: cp-device  
+        run: |
+          cd ./HIWIFI_HC5611
+          cp -r ./ ../openwrt/
+          cd ../openwrt
+          ./scripts/feeds update -a & ./scripts/feeds install -a
+          make menuconfig
+          
+          
+      
           
           
           
