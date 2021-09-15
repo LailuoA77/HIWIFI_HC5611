@@ -37,12 +37,13 @@ jobs:
           grep -lri hc5611 ./
           ./scripts/feeds clean
           ./scripts/feeds update -a & ./scripts/feeds install -a
+          make defconfig
           
       #编译固件
       - name: 下载固件依赖
         run: |
-          make defconfig
-          make download -j8
+          ls -l
+          make download
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
           
