@@ -41,6 +41,7 @@ jobs:
       #编译固件
       - name: 下载固件依赖
         run: |
+          make defconfig
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
