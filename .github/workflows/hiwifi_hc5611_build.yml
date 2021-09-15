@@ -34,6 +34,7 @@ jobs:
           cd ./HIWIFI_HC5611
           cp -r ./ ../openwrt/
           cd ../openwrt
+          grep -lri hc5611 ./
           ./scripts/feeds update -a & ./scripts/feeds install -a
           
           
