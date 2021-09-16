@@ -1,4 +1,4 @@
-name: hiwifi_hc5611_build
+name: immortalwrt_hiwifi_hc5611_build
 on:
   push:
     branches: 
