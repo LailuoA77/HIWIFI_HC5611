@@ -1,19 +1,19 @@
 name: immortalwrt_hiwifi_hc5611_build
 on:
   push:
-    branches: 
+    branches:
         -immortalwrt
   pull_request:
     branches: [ -immortalwrt ]
   workflow_dispatch:
 
 jobs:
-  build:
+  build_farmwave:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: install ev
+      - name: 配置编译主机环境
         run: |
           sudo -E apt-get update
           sudo -E apt-get -y install subversion g++ zlib1g-dev build-essential git python rsync man-db
@@ -22,7 +22,7 @@ jobs:
           sudo -E apt-get clean
           sudo -E apt-get autoremove
           df -hl          
-      - name: git clone
+      - name: 拷贝源码到编译主机中
       #更换自己的软件源
         run: |
           git clone -b master https://github.com/immortalwrt/immortalwrt.git
@@ -30,7 +30,7 @@ jobs:
           echo "数据克隆结束！"
           
       #将文件覆盖到openwrt根目录下
-      - name: cp-device  
+      - name: 设置HIWIFI_HC5611设备信息 
         run: |
           cd ./HIWIFI_HC5611
           cp -r ./ ../immortalwrt/
