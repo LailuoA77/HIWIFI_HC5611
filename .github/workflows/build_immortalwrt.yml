@@ -1,0 +1,63 @@
+name: hiwifi_hc5611_build
+on:
+  push:
+    branches: 
+        -immortalwrt
+  pull_request:
+    branches: [ -immortalwrt ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: install ev
+        run: |
+          sudo -E apt-get update
+          sudo -E apt-get -y install subversion g++ zlib1g-dev build-essential git python rsync man-db
+          sudo -E apt-get -y install libncurses5-dev gawk gettext unzip file libssl-dev wget zip time
+          sudo -E apt-get autoclean
+          sudo -E apt-get clean
+          sudo -E apt-get autoremove
+          df -hl          
+      - name: git clone
+      #更换自己的软件源
+        run: |
+          git clone -b master https://github.com/immortalwrt/immortalwrt.git
+          git clone -b by_immortalwrt https://github.com/LailuoA77/HIWIFI_HC5611.git      
+          echo "数据克隆结束！"
+          
+      #将文件覆盖到openwrt根目录下
+      - name: cp-device  
+        run: |
+          cd ./HIWIFI_HC5611
+          cp -r ./ ../immortalwrt/
+          cd ../immortalwrt
+          rm -rf ~/HIWIFI_HC5611
+          grep -lri hc5611 ./
+          ./scripts/feeds clean
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          make defconfig
+                    
+      - name: 编译固件
+        run: |
+          cd immortalwrt
+          echo -e "$(nproc) thread build."
+          make -j$(nproc)        
+          
+      - name: 完成固件
+        run: |
+          cd immortalwrt
+          rm -rf ./artifact/
+          mkdir -p ./artifact/
+          find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./artifact/
+          find ./bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./artifact/
+          
+      - name: 发布固件
+        uses: actions/upload-artifact@master
+        with:
+          name: OpenWrt firmware
+          path: ./openwrt/artifact/
