@@ -32,6 +32,7 @@ jobs:
       #将文件覆盖到openwrt根目录下
       - name: 设置HIWIFI_HC5611设备信息 
         run: |
+          ls -l
           cd ./HIWIFI_HC5611
           cp -r ./ ../immortalwrt/
           cd ../immortalwrt
