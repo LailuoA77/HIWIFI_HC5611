@@ -1,21 +1,19 @@
-
-name: hiwifi_hc5611_build
+name: immortalwrt_hiwifi_hc5611_build
 on:
   push:
-    branches: 
-        -master
+    branches:
+        -immortalwrt
   pull_request:
-    branches: [ 构建 ]
+    branches: [ -immortalwrt ]
   workflow_dispatch:
 
 jobs:
-  build:
+  build_farmwave:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: install ev
+      - name: 配置编译主机环境
         run: |
           sudo -E apt-get update
           sudo -E apt-get -y install subversion g++ zlib1g-dev build-essential git python rsync man-db
@@ -24,20 +22,20 @@ jobs:
           sudo -E apt-get clean
           sudo -E apt-get autoremove
           df -hl          
-
-      - name: git clone
+      - name: 拷贝源码到编译主机中
       #更换自己的软件源
         run: |
-          git clone https://github.com/Lienol/openwrt.git
-          git clone https://github.com/LailuoA77/HIWIFI_HC5611.git      
+          git clone -b master https://github.com/immortalwrt/immortalwrt.git
+          git clone -b by_immortalwrt https://github.com/LailuoA77/HIWIFI_HC5611.git      
           echo "数据克隆结束！"
           
       #将文件覆盖到openwrt根目录下
-      - name: cp-device  
+      - name: 设置HIWIFI_HC5611设备信息 
         run: |
+          ls -l
           cd ./HIWIFI_HC5611
-          cp -r ./ ../openwrt/
-          cd ../openwrt
+          cp -r ./ ../immortalwrt/
+          cd ../immortalwrt
           rm -rf ~/HIWIFI_HC5611
           grep -lri hc5611 ./
           ./scripts/feeds clean
@@ -45,25 +43,25 @@ jobs:
           ./scripts/feeds install -a
           make defconfig
           
-      #编译固件
+  
       - name: 下载固件依赖
         run: |
-          cd openwrt
-          df -hl 
+          cd immortalwrt
           echo -e "$(nproc) thread download."
           make download -j$(nproc)
           # find dl -size -1024c -exec ls -l {} \;
           # find dl -size -1024c -exec rm -f {} \;
+          df -hl
           
       - name: 编译固件
         run: |
-          cd openwrt
+          cd immortalwrt
           echo -e "$(nproc) thread build."
           make -j$(nproc)        
           
       - name: 完成固件
         run: |
-          cd openwrt
+          cd immortalwrt
           rm -rf ./artifact/
           mkdir -p ./artifact/
           find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./artifact/
@@ -72,10 +70,5 @@ jobs:
       - name: 发布固件
         uses: actions/upload-artifact@master
         with:
-          name: OpenWrt firmware
-          path: ./openwrt/artifact/
-          
-      
-          
-          
-          
+          name: immortalwrt firmware
+          path: ./immortalwrt/artifact/
