@@ -46,12 +46,12 @@ jobs:
   
       - name: 下载固件依赖
         run: |
-          cd openwrt
-          df -hl 
+          cd immortalwrt
           echo -e "$(nproc) thread download."
           make download -j$(nproc)
           # find dl -size -1024c -exec ls -l {} \;
           # find dl -size -1024c -exec rm -f {} \;
+          df -hl
           
       - name: 编译固件
         run: |
