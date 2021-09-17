@@ -22,7 +22,7 @@
 		compatible = "gpio-leds";
 
 		system {
-			label = "hc5611:blue:system";
+			label = "hc5611:green";
 			gpios = <&gpio 11 GPIO_ACTIVE_HIGH>;
 		};
 	};
