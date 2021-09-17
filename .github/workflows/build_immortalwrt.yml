@@ -41,7 +41,17 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           make defconfig
-                    
+          
+  
+      - name: 下载固件依赖
+        run: |
+          cd openwrt
+          df -hl 
+          echo -e "$(nproc) thread download."
+          make download -j$(nproc)
+          # find dl -size -1024c -exec ls -l {} \;
+          # find dl -size -1024c -exec rm -f {} \;
+          
       - name: 编译固件
         run: |
           cd immortalwrt
